@@ -1,0 +1,16 @@
+run_vbmp=function(train_start, train_end, test_start, test_end, maxits, execution_count=1){
+	comp = read.table("vector.txt")
+	labels = as.matrix(comp[,1])
+	comp = comp[,2:ncol(comp)]
+	train_data = comp[train_start:train_end,]
+	train_class = labels[train_start:train_end,]
+	test_data = comp[test_start:test_end,]
+	test_class = labels[test_start:test_end,]
+	theta = rep(1, ncol(train_data))
+	result = newvbmp(train_data, train_class, test_data, test_class, theta, control = list(bThetaEstimate = F, bMonitor = T, maxIts = maxits))
+	filename = sprintf("result%d_binned_5_classes.dump",execution_count)
+	save(result,file=filename)
+	return(predError(result))
+}
+
+
